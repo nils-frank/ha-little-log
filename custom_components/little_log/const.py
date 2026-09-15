@@ -1,14 +1,15 @@
-"""Constants for the Baby Tracker integration."""
+"""Constants for the Little Log integration."""
 
 from __future__ import annotations
 
 from datetime import timedelta
 from typing import Final
 
-DOMAIN: Final = "babytracker"
+DOMAIN: Final = "little_log"
 
-# The vendor migrated from https://lukas-reindl.de/babytracker/api/integration/v1 to
-# this host and dropped the /babytracker path prefix. The old URL answers with a
+# Little Log was previously published as "Baby Tracker" on
+# https://lukas-reindl.de/babytracker/api/integration/v1. The vendor migrated host
+# and dropped the /babytracker path prefix. The old URL answers with a
 # cross-host 301; HTTP clients (aiohttp included) strip the Authorization header on a
 # cross-host redirect, which turns a valid token into a misleading 401. Always call the
 # new host directly and never follow a redirect away from it.

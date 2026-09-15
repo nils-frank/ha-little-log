@@ -14,12 +14,12 @@ from pytest_homeassistant_custom_component.common import (
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
 
-from custom_components.babytracker.api import (
-    BabyTrackerAuthError,
-    BabyTrackerConnectionError,
-    BabyTrackerStatus,
+from custom_components.little_log.api import (
+    LittleLogAuthError,
+    LittleLogConnectionError,
+    LittleLogStatus,
 )
-from custom_components.babytracker.const import DEFAULT_SCAN_INTERVAL
+from custom_components.little_log.const import DEFAULT_SCAN_INTERVAL
 from tests.const import STATUS_PAYLOAD
 
 
@@ -39,7 +39,7 @@ async def test_setup_retries_on_connection_error(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_client: AsyncMock
 ) -> None:
     """An unreachable API leaves the entry in retry."""
-    mock_client.async_get_status.side_effect = BabyTrackerConnectionError("down")
+    mock_client.async_get_status.side_effect = LittleLogConnectionError("down")
     mock_config_entry.add_to_hass(hass)
 
     await hass.config_entries.async_setup(mock_config_entry.entry_id)
@@ -70,7 +70,7 @@ async def test_coordinator_polls_and_recovers(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Polling picks up new data, and a failed poll marks the sensor unavailable."""
-    mock_client.async_get_status.return_value = BabyTrackerStatus.from_dict(
+    mock_client.async_get_status.return_value = LittleLogStatus.from_dict(
         {**STATUS_PAYLOAD, "state": "awake", "elapsed_min": 5}
     )
     freezer.tick(DEFAULT_SCAN_INTERVAL + timedelta(seconds=1))
@@ -81,7 +81,7 @@ async def test_coordinator_polls_and_recovers(
     assert state.state == "awake"
     assert state.attributes["elapsed_min"] == 5
 
-    mock_client.async_get_status.side_effect = BabyTrackerConnectionError("down")
+    mock_client.async_get_status.side_effect = LittleLogConnectionError("down")
     freezer.tick(DEFAULT_SCAN_INTERVAL + timedelta(seconds=1))
     async_fire_time_changed(hass)
     await hass.async_block_till_done()
@@ -93,7 +93,7 @@ async def test_coordinator_auth_error_starts_reauth(
     hass: HomeAssistant, init_integration: MockConfigEntry, mock_client: AsyncMock
 ) -> None:
     """A revoked token triggers the reauth flow instead of endless retries."""
-    mock_client.async_get_status.side_effect = BabyTrackerAuthError("revoked")
+    mock_client.async_get_status.side_effect = LittleLogAuthError("revoked")
 
     await init_integration.runtime_data.async_refresh()
     await hass.async_block_till_done()

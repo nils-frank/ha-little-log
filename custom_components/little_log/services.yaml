@@ -4,7 +4,7 @@ sleep_start:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -26,7 +26,7 @@ sleep_stop:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -48,7 +48,7 @@ sleep_toggle:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -70,7 +70,7 @@ cry_start:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -92,7 +92,7 @@ cry_stop:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -114,7 +114,7 @@ bottle:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -136,7 +136,7 @@ cue:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -163,7 +163,7 @@ diaper:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -215,7 +215,7 @@ nursing:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"
     minutes_ago:
       required: false
       example: 15
@@ -247,4 +247,4 @@ undo:
       required: false
       selector:
         config_entry:
-          integration: "babytracker"
+          integration: "little_log"

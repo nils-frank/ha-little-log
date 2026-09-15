@@ -1,4 +1,4 @@
-"""Tests for the Baby Tracker config flow."""
+"""Tests for the Little Log config flow."""
 
 from __future__ import annotations
 
@@ -12,11 +12,11 @@ from homeassistant.const import CONF_TOKEN
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 
-from custom_components.babytracker.api import (
-    BabyTrackerAuthError,
-    BabyTrackerConnectionError,
+from custom_components.little_log.api import (
+    LittleLogAuthError,
+    LittleLogConnectionError,
 )
-from custom_components.babytracker.const import DOMAIN
+from custom_components.little_log.const import DOMAIN
 from tests.const import MOCK_TOKEN
 
 
@@ -32,7 +32,7 @@ async def test_user_flow_success(hass: HomeAssistant, mock_client: AsyncMock) ->
         result["flow_id"], {CONF_TOKEN: MOCK_TOKEN}
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert result["title"] == "Baby Tracker"
+    assert result["title"] == "Little Log"
     assert result["data"] == {CONF_TOKEN: MOCK_TOKEN}
     assert result["result"].unique_id == MOCK_TOKEN
     # Once to validate the token, once for the coordinator's first refresh.
@@ -42,8 +42,8 @@ async def test_user_flow_success(hass: HomeAssistant, mock_client: AsyncMock) ->
 @pytest.mark.parametrize(
     ("error", "expected"),
     [
-        (BabyTrackerAuthError("nope"), "invalid_auth"),
-        (BabyTrackerConnectionError("down"), "cannot_connect"),
+        (LittleLogAuthError("nope"), "invalid_auth"),
+        (LittleLogConnectionError("down"), "cannot_connect"),
         (RuntimeError("boom"), "unknown"),
     ],
 )
@@ -98,7 +98,7 @@ async def test_reauth_flow(
     result = await init_integration.start_reauth_flow(hass)
     assert result["step_id"] == "reauth_confirm"
 
-    mock_client.async_get_status.side_effect = BabyTrackerAuthError("nope")
+    mock_client.async_get_status.side_effect = LittleLogAuthError("nope")
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], {CONF_TOKEN: new_token}
     )

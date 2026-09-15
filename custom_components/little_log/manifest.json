@@ -1,0 +1,12 @@
+{
+  "domain": "little_log",
+  "name": "Little Log",
+  "codeowners": ["@nils-frank"],
+  "config_flow": true,
+  "documentation": "https://github.com/nils-frank/ha-little-log",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/nils-frank/ha-little-log/issues",
+  "quality_scale": "silver",
+  "version": "1.0.0"
+}

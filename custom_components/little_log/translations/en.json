@@ -2,23 +2,23 @@
   "config": {
     "step": {
       "user": {
-        "title": "Baby Tracker",
-        "description": "Enter the integration token from the Baby Tracker app under Settings, Integrations. It starts with 'bt_'.",
+        "title": "Little Log",
+        "description": "Enter an integration token from your Little Log account settings. It starts with 'bt_'.",
         "data": {
           "token": "Token"
         },
         "data_description": {
-          "token": "The per-device bearer token generated in the Baby Tracker app."
+          "token": "A per-device bearer token generated in Little Log."
         }
       },
       "reauth_confirm": {
-        "title": "Reauthenticate Baby Tracker",
-        "description": "The stored token is no longer accepted. Generate a new one in the Baby Tracker app and enter it here.",
+        "title": "Reauthenticate Little Log",
+        "description": "The stored token is no longer accepted. Generate a new one in your Little Log account settings and enter it here.",
         "data": {
           "token": "Token"
         },
         "data_description": {
-          "token": "The per-device bearer token generated in the Baby Tracker app."
+          "token": "A per-device bearer token generated in Little Log."
         }
       }
     },
@@ -30,7 +30,7 @@
     "abort": {
       "already_configured": "This token is already configured",
       "reauth_successful": "Re-authentication was successful",
-      "unique_id_mismatch": "This token belongs to a different Baby Tracker account"
+      "unique_id_mismatch": "This token belongs to a different Little Log account"
     }
   },
   "entity": {
@@ -71,13 +71,13 @@
   },
   "exceptions": {
     "no_entries": {
-      "message": "No loaded Baby Tracker config entry was found."
+      "message": "No loaded Little Log config entry was found."
     },
     "multiple_entries": {
-      "message": "More than one Baby Tracker config entry is loaded. Pass 'config_entry_id' to pick one."
+      "message": "More than one Little Log config entry is loaded. Pass 'config_entry_id' to pick one."
     },
     "entry_not_loaded": {
-      "message": "The selected Baby Tracker config entry is not loaded."
+      "message": "The selected Little Log config entry is not loaded."
     },
     "invalid_at_utc": {
       "message": "'at_utc' is not a valid timestamp."
@@ -89,8 +89,8 @@
       "description": "Starts a sleep period.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -107,8 +107,8 @@
       "description": "Ends the current sleep period.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -125,8 +125,8 @@
       "description": "Starts or ends a sleep period depending on the current state. Suited to a single physical button.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -143,8 +143,8 @@
       "description": "Starts a crying period.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -161,8 +161,8 @@
       "description": "Ends the current crying period.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -179,8 +179,8 @@
       "description": "Logs a bottle feeding.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -197,8 +197,8 @@
       "description": "Logs a cue event such as yawning.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -219,8 +219,8 @@
       "description": "Logs a diaper change. Use either 'Kind' or the pee and poop levels; with no fields the API defaults to medium for both.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -249,8 +249,8 @@
       "description": "Logs a nursing session.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         },
         "minutes_ago": {
           "name": "Minutes ago",
@@ -271,8 +271,8 @@
       "description": "Reverses the last command sent with this token, within 10 minutes of it.",
       "fields": {
         "config_entry_id": {
-          "name": "Baby Tracker account",
-          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+          "name": "Little Log account",
+          "description": "Which Little Log token to send the command with. Only needed when more than one is configured."
         }
       }
     }

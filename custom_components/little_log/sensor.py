@@ -1,4 +1,4 @@
-"""Sensor platform for the Baby Tracker integration."""
+"""Sensor platform for the Little Log integration."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import BabyTrackerConfigEntry, BabyTrackerCoordinator
+from .coordinator import LittleLogConfigEntry, LittleLogCoordinator
 
 # Read-only platform fed by the coordinator, so no update is ever issued per entity.
 PARALLEL_UPDATES = 0
@@ -27,14 +27,14 @@ STATE_OPTIONS = ["awake", "asleep"]
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: BabyTrackerConfigEntry,
+    entry: LittleLogConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the Baby Tracker sensor."""
+    """Set up the Little Log sensor."""
     async_add_entities([BabyStateSensor(hass, entry.runtime_data)])
 
 
-class BabyStateSensor(CoordinatorEntity[BabyTrackerCoordinator], SensorEntity):
+class BabyStateSensor(CoordinatorEntity[LittleLogCoordinator], SensorEntity):
     """Current awake/asleep state, with the rest of `GET /status` as attributes."""
 
     _attr_has_entity_name = True
@@ -42,9 +42,7 @@ class BabyStateSensor(CoordinatorEntity[BabyTrackerCoordinator], SensorEntity):
     _attr_device_class = SensorDeviceClass.ENUM
     _attr_options = STATE_OPTIONS
 
-    def __init__(
-        self, hass: HomeAssistant, coordinator: BabyTrackerCoordinator
-    ) -> None:
+    def __init__(self, hass: HomeAssistant, coordinator: LittleLogCoordinator) -> None:
         """Initialise the sensor."""
         super().__init__(coordinator)
         entry_id = coordinator.config_entry.entry_id
@@ -56,9 +54,9 @@ class BabyStateSensor(CoordinatorEntity[BabyTrackerCoordinator], SensorEntity):
         )
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry_id)},
-            name="Baby Tracker",
-            manufacturer="Lukas Reindl",
-            configuration_url="https://lukas-reindl.de/babytracker/",
+            name="Little Log",
+            manufacturer="Little Log",
+            configuration_url="https://little-log.de/",
         )
 
     @property

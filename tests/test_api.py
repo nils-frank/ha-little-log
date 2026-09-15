@@ -1,4 +1,4 @@
-"""Tests for the Baby Tracker API client."""
+"""Tests for the Little Log API client."""
 
 from __future__ import annotations
 
@@ -8,18 +8,18 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from custom_components.babytracker.api import (
-    BabyTrackerAuthError,
-    BabyTrackerClient,
-    BabyTrackerConnectionError,
-    BabyTrackerStatus,
+from custom_components.little_log.api import (
+    LittleLogAuthError,
+    LittleLogClient,
+    LittleLogConnectionError,
+    LittleLogStatus,
 )
-from custom_components.babytracker.const import API_BASE_URL
+from custom_components.little_log.const import API_BASE_URL
 from tests.const import COMMAND_RESPONSE, MOCK_TOKEN, STATUS_PAYLOAD
 
 
-def _client(hass: HomeAssistant) -> BabyTrackerClient:
-    return BabyTrackerClient(async_get_clientsession(hass), MOCK_TOKEN)
+def _client(hass: HomeAssistant) -> LittleLogClient:
+    return LittleLogClient(async_get_clientsession(hass), MOCK_TOKEN)
 
 
 async def test_get_status_parses_payload(
@@ -55,7 +55,7 @@ async def test_auth_error(
     """A rejected token raises the auth error."""
     aioclient_mock.get(f"{API_BASE_URL}/status", status=status)
 
-    with pytest.raises(BabyTrackerAuthError):
+    with pytest.raises(LittleLogAuthError):
         await _client(hass).async_get_status()
 
 
@@ -65,7 +65,7 @@ async def test_server_error(
     """Any other non-2xx surfaces as a connection error."""
     aioclient_mock.get(f"{API_BASE_URL}/status", status=500)
 
-    with pytest.raises(BabyTrackerConnectionError):
+    with pytest.raises(LittleLogConnectionError):
         await _client(hass).async_get_status()
 
 
@@ -79,7 +79,7 @@ async def test_redirect_is_not_followed(
         headers={"Location": "https://example.invalid/status"},
     )
 
-    with pytest.raises(BabyTrackerConnectionError, match="redirect"):
+    with pytest.raises(LittleLogConnectionError, match="redirect"):
         await _client(hass).async_get_status()
 
 
@@ -89,13 +89,13 @@ async def test_non_json_payload(
     """A non-JSON body is reported rather than crashing the coordinator."""
     aioclient_mock.get(f"{API_BASE_URL}/status", text="not json")
 
-    with pytest.raises(BabyTrackerConnectionError):
+    with pytest.raises(LittleLogConnectionError):
         await _client(hass).async_get_status()
 
 
 def test_status_tolerates_missing_fields() -> None:
     """Undocumented or missing fields do not break parsing."""
-    status = BabyTrackerStatus.from_dict(
+    status = LittleLogStatus.from_dict(
         {"state": "awake", "elapsed_min": "7", "today": None}
     )
 
@@ -103,4 +103,4 @@ def test_status_tolerates_missing_fields() -> None:
     assert status.since_utc is None
     assert status.today == {}
 
-    assert BabyTrackerStatus.from_dict({"elapsed_min": "n/a"}).elapsed_min is None
+    assert LittleLogStatus.from_dict({"elapsed_min": "n/a"}).elapsed_min is None

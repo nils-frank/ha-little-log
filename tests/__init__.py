@@ -1,1 +1,1 @@
-"""Tests for the Baby Tracker integration."""
+"""Tests for the Little Log integration."""

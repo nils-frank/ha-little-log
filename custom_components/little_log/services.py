@@ -1,4 +1,4 @@
-"""Services for the Baby Tracker integration."""
+"""Services for the Little Log integration."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.selector import ConfigEntrySelector
 from homeassistant.util import dt as dt_util
 
-from .api import BabyTrackerError
+from .api import LittleLogError
 from .const import (
     ATTR_AT_UTC,
     ATTR_KIND,
@@ -110,7 +110,7 @@ NURSING_SERVICE_SCHEMA = vol.Schema(
 
 
 @dataclass(frozen=True, slots=True)
-class BabyTrackerService:
+class LittleLogService:
     """One service and the API call it maps to."""
 
     name: str
@@ -120,26 +120,26 @@ class BabyTrackerService:
     body_fields: tuple[str, ...] = ()
 
 
-SERVICES: tuple[BabyTrackerService, ...] = (
-    BabyTrackerService(SERVICE_SLEEP_START, "/sleep/start", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(SERVICE_SLEEP_STOP, "/sleep/stop", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(SERVICE_SLEEP_TOGGLE, "/sleep/toggle", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(SERVICE_CRY_START, "/cry/start", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(SERVICE_CRY_STOP, "/cry/stop", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(SERVICE_BOTTLE, "/bottle", TIMED_SERVICE_SCHEMA),
-    BabyTrackerService(
+SERVICES: tuple[LittleLogService, ...] = (
+    LittleLogService(SERVICE_SLEEP_START, "/sleep/start", TIMED_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_SLEEP_STOP, "/sleep/stop", TIMED_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_SLEEP_TOGGLE, "/sleep/toggle", TIMED_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_CRY_START, "/cry/start", TIMED_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_CRY_STOP, "/cry/stop", TIMED_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_BOTTLE, "/bottle", TIMED_SERVICE_SCHEMA),
+    LittleLogService(
         SERVICE_CUE, "/cue", CUE_SERVICE_SCHEMA, body_fields=(ATTR_SUBTYPE,)
     ),
-    BabyTrackerService(
+    LittleLogService(
         SERVICE_DIAPER,
         "/diaper",
         DIAPER_SERVICE_SCHEMA,
         body_fields=(ATTR_KIND, ATTR_PEE_LEVEL, ATTR_POOP_LEVEL),
     ),
-    BabyTrackerService(
+    LittleLogService(
         SERVICE_NURSING, "/nursing", NURSING_SERVICE_SCHEMA, body_fields=(ATTR_SIDE,)
     ),
-    BabyTrackerService(SERVICE_UNDO, "/undo", PLAIN_SERVICE_SCHEMA),
+    LittleLogService(SERVICE_UNDO, "/undo", PLAIN_SERVICE_SCHEMA),
 )
 
 
@@ -169,7 +169,7 @@ def _async_get_coordinator(hass: HomeAssistant, call: ServiceCall) -> Any:
     return entries[0].runtime_data
 
 
-def _build_body(service: BabyTrackerService, call: ServiceCall) -> dict[str, Any]:
+def _build_body(service: LittleLogService, call: ServiceCall) -> dict[str, Any]:
     """Turn the service call into the API's JSON body."""
     body: dict[str, Any] = {}
     if (minutes_ago := call.data.get(ATTR_MINUTES_AGO)) is not None:
@@ -199,7 +199,7 @@ def _to_utc_iso(value: datetime | str) -> str:
 
 
 def _make_handler(
-    service: BabyTrackerService,
+    service: LittleLogService,
 ) -> Callable[[ServiceCall], Awaitable[ServiceResponse]]:
     """Build the handler for one service."""
 
@@ -210,7 +210,7 @@ def _make_handler(
             response = await coordinator.client.async_command(
                 service.path, body or None
             )
-        except BabyTrackerError as err:
+        except LittleLogError as err:
             raise HomeAssistantError(str(err)) from err
 
         # Refresh so the sensor reflects the change without waiting out the interval.
@@ -224,7 +224,7 @@ def _make_handler(
 
 @callback
 def async_setup_services(hass: HomeAssistant) -> None:
-    """Register the Baby Tracker services once."""
+    """Register the Little Log services once."""
     for service in SERVICES:
         if hass.services.has_service(DOMAIN, service.name):
             continue

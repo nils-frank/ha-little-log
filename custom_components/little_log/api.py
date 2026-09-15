@@ -1,4 +1,4 @@
-"""Async client for the Baby Tracker integration API."""
+"""Async client for the Little Log integration API."""
 
 from __future__ import annotations
 
@@ -17,20 +17,20 @@ _LOGGER = logging.getLogger(__name__)
 REQUEST_TIMEOUT = ClientTimeout(total=30)
 
 
-class BabyTrackerError(Exception):
-    """Base error for all Baby Tracker API failures."""
+class LittleLogError(Exception):
+    """Base error for all Little Log API failures."""
 
 
-class BabyTrackerAuthError(BabyTrackerError):
+class LittleLogAuthError(LittleLogError):
     """Raised when the bearer token is rejected (HTTP 401/403)."""
 
 
-class BabyTrackerConnectionError(BabyTrackerError):
+class LittleLogConnectionError(LittleLogError):
     """Raised when the API is unreachable or answers unusably."""
 
 
 @dataclass(slots=True)
-class BabyTrackerStatus:
+class LittleLogStatus:
     """Parsed `GET /status` payload.
 
     Only `state` is treated as required. Everything else is optional because the full
@@ -48,7 +48,7 @@ class BabyTrackerStatus:
     raw: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> BabyTrackerStatus:
+    def from_dict(cls, data: dict[str, Any]) -> LittleLogStatus:
         """Build a status from an API payload, tolerating missing/odd fields."""
         elapsed = data.get("elapsed_min")
         if not isinstance(elapsed, int) or isinstance(elapsed, bool):
@@ -79,8 +79,8 @@ def _as_dict(value: Any) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-class BabyTrackerClient:
-    """Thin async wrapper around the Baby Tracker HTTP API."""
+class LittleLogClient:
+    """Thin async wrapper around the Little Log HTTP API."""
 
     def __init__(
         self,
@@ -93,10 +93,10 @@ class BabyTrackerClient:
         self._token = token
         self._base_url = base_url.rstrip("/")
 
-    async def async_get_status(self) -> BabyTrackerStatus:
+    async def async_get_status(self) -> LittleLogStatus:
         """Fetch the current status."""
         data = await self._async_request("GET", "/status")
-        return BabyTrackerStatus.from_dict(data)
+        return LittleLogStatus.from_dict(data)
 
     async def async_command(
         self, path: str, body: dict[str, Any] | None = None
@@ -126,35 +126,33 @@ class BabyTrackerClient:
                 timeout=REQUEST_TIMEOUT,
             )
             if response.status in (301, 302, 303, 307, 308):
-                raise BabyTrackerConnectionError(
+                raise LittleLogConnectionError(
                     f"Unexpected redirect from {url} to "
                     f"{response.headers.get('Location', 'unknown location')}; "
                     "the configured API base URL is wrong"
                 )
             if response.status in (401, 403):
-                raise BabyTrackerAuthError(
-                    f"Baby Tracker rejected the token (HTTP {response.status})"
+                raise LittleLogAuthError(
+                    f"Little Log rejected the token (HTTP {response.status})"
                 )
             response.raise_for_status()
             payload = await response.json(content_type=None)
-        except BabyTrackerError:
+        except LittleLogError:
             raise
         except ClientResponseError as err:
             # Any other non-2xx: no documented error codes, so report it generically.
-            raise BabyTrackerConnectionError(
-                f"Baby Tracker returned HTTP {err.status} for {method} {path}"
+            raise LittleLogConnectionError(
+                f"Little Log returned HTTP {err.status} for {method} {path}"
             ) from err
         except (ClientError, TimeoutError) as err:
-            raise BabyTrackerConnectionError(
-                f"Cannot reach Baby Tracker: {err}"
-            ) from err
+            raise LittleLogConnectionError(f"Cannot reach Little Log: {err}") from err
         except ValueError as err:
-            raise BabyTrackerConnectionError(
-                f"Baby Tracker sent a non-JSON response for {method} {path}"
+            raise LittleLogConnectionError(
+                f"Little Log sent a non-JSON response for {method} {path}"
             ) from err
 
         if not isinstance(payload, dict):
-            raise BabyTrackerConnectionError(
-                f"Baby Tracker sent an unexpected payload for {method} {path}"
+            raise LittleLogConnectionError(
+                f"Little Log sent an unexpected payload for {method} {path}"
             )
         return payload

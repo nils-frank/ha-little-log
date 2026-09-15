@@ -1,4 +1,4 @@
-"""Data update coordinator for the Baby Tracker integration."""
+"""Data update coordinator for the Little Log integration."""
 
 from __future__ import annotations
 
@@ -10,28 +10,28 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
-    BabyTrackerAuthError,
-    BabyTrackerClient,
-    BabyTrackerConnectionError,
-    BabyTrackerStatus,
+    LittleLogAuthError,
+    LittleLogClient,
+    LittleLogConnectionError,
+    LittleLogStatus,
 )
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-type BabyTrackerConfigEntry = ConfigEntry[BabyTrackerCoordinator]
+type LittleLogConfigEntry = ConfigEntry[LittleLogCoordinator]
 
 
-class BabyTrackerCoordinator(DataUpdateCoordinator[BabyTrackerStatus]):
+class LittleLogCoordinator(DataUpdateCoordinator[LittleLogStatus]):
     """Poll `GET /status` on the vendor-recommended interval."""
 
-    config_entry: BabyTrackerConfigEntry
+    config_entry: LittleLogConfigEntry
 
     def __init__(
         self,
         hass: HomeAssistant,
-        config_entry: BabyTrackerConfigEntry,
-        client: BabyTrackerClient,
+        config_entry: LittleLogConfigEntry,
+        client: LittleLogClient,
     ) -> None:
         """Initialise the coordinator."""
         super().__init__(
@@ -43,13 +43,13 @@ class BabyTrackerCoordinator(DataUpdateCoordinator[BabyTrackerStatus]):
         )
         self.client = client
 
-    async def _async_update_data(self) -> BabyTrackerStatus:
+    async def _async_update_data(self) -> LittleLogStatus:
         """Fetch the latest status."""
         try:
             return await self.client.async_get_status()
-        except BabyTrackerAuthError as err:
+        except LittleLogAuthError as err:
             # Triggers the reauth flow instead of retrying a token that will
             # keep failing.
             raise ConfigEntryAuthFailed(str(err)) from err
-        except BabyTrackerConnectionError as err:
+        except LittleLogConnectionError as err:
             raise UpdateFailed(str(err)) from err

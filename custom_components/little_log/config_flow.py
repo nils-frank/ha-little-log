@@ -1,4 +1,4 @@
-"""Config flow for the Baby Tracker integration."""
+"""Config flow for the Little Log integration."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from homeassistant.helpers.selector import (
     TextSelectorType,
 )
 
-from .api import BabyTrackerAuthError, BabyTrackerClient, BabyTrackerConnectionError
+from .api import LittleLogAuthError, LittleLogClient, LittleLogConnectionError
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 )
 
 
-class BabyTrackerConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Baby Tracker."""
+class LittleLogConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for Little Log."""
 
     VERSION = 1
 
@@ -41,15 +41,15 @@ class BabyTrackerConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns a mapping of form errors, empty when the token works.
         """
-        client = BabyTrackerClient(async_get_clientsession(self.hass), token)
+        client = LittleLogClient(async_get_clientsession(self.hass), token)
         try:
             await client.async_get_status()
-        except BabyTrackerAuthError:
+        except LittleLogAuthError:
             return {"base": "invalid_auth"}
-        except BabyTrackerConnectionError:
+        except LittleLogConnectionError:
             return {"base": "cannot_connect"}
         except Exception:
-            _LOGGER.exception("Unexpected error validating the Baby Tracker token")
+            _LOGGER.exception("Unexpected error validating the Little Log token")
             return {"base": "unknown"}
         return {}
 
@@ -67,7 +67,7 @@ class BabyTrackerConfigFlow(ConfigFlow, domain=DOMAIN):
             errors = await self._async_validate_token(token)
             if not errors:
                 return self.async_create_entry(
-                    title="Baby Tracker", data={CONF_TOKEN: token}
+                    title="Little Log", data={CONF_TOKEN: token}
                 )
 
         return self.async_show_form(

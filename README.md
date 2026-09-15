@@ -1,13 +1,45 @@
-# Baby Tracker for Home Assistant
+# Little Log for Home Assistant
 
-A Home Assistant custom integration for the [Baby Tracker](https://lukas-reindl.de/babytracker/)
-app. It polls the app's integration API for the current sleep state and exposes every
-logging endpoint (sleep, crying, bottle, cue, diaper, nursing, undo) as a Home Assistant
-service, so physical buttons, dashboards, voice assistants and automations can record
-events without opening the phone.
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
+[![Validate](https://github.com/nils-frank/ha-little-log/actions/workflows/validate.yml/badge.svg)](https://github.com/nils-frank/ha-little-log/actions/workflows/validate.yml)
+[![Test](https://github.com/nils-frank/ha-little-log/actions/workflows/test.yml/badge.svg)](https://github.com/nils-frank/ha-little-log/actions/workflows/test.yml)
 
-This is an unofficial community integration and is not affiliated with the Baby Tracker
-app or its author.
+Home Assistant integration for [Little Log](https://little-log.de/), bringing your
+baby's sleep state into Home Assistant and letting you log events from anywhere in your
+home.
+
+## What is Little Log?
+
+[Little Log](https://little-log.de/) is a baby tracking app: *"Schlaf erfassen, das
+nächste Schlaffenster abschätzen, den Verlauf sehen"* - record sleep, estimate the next
+sleep window, see the history.
+
+You log what happens during the day (sleep, crying, bottles, nursing, diapers, tired
+cues like yawning) and the app turns that into a picture of the day: how long the baby
+has been awake, when the next nap is likely due, and how today compares to the usual
+rhythm. The forecast is the part that makes it more than a logbook, since the awake
+window between naps is what most sleep routines hang on.
+
+Little Log offers a token-based integration API, which is what this project talks to.
+
+> Little Log is a third-party app and this integration is an unofficial community
+> project. It is not built, endorsed or supported by the app's author. Bugs in the
+> integration belong in [this repo's issue
+> tracker](https://github.com/nils-frank/ha-little-log/issues), not with the app.
+
+## Why use it from Home Assistant?
+
+Reaching for your phone to log a nap is exactly the moment you do not want to be holding
+a phone. With this integration you can:
+
+- Put a physical button on the nursery wall and wire it to `little_log.sleep_toggle`,
+  so one press starts or ends the nap.
+- Log a bottle or diaper change from a wall tablet dashboard.
+- Have the current state on your Lock Screen as an iOS Live Activity (see below).
+- Ask a voice assistant, or have an automation announce the app's own summary sentence
+  over a speaker.
+- Use the sleep state in unrelated automations: dim the hall lights while the baby
+  sleeps, pause the vacuum, mute the doorbell.
 
 ## Features
 
@@ -15,44 +47,67 @@ app or its author.
   created, and reauthentication when a token is revoked later.
 - `sensor.baby_state` polled every 60 seconds (the interval the vendor recommends),
   carrying the full status payload as attributes.
-- Ten services mapping 1:1 onto the API, all of them able to backdate an event.
-- Every service can return the API's `speech_de` sentence through `response_variable`,
+- Ten actions mapping 1:1 onto the API, all of them able to backdate an event.
+- Every action can return the API's `speech_de` sentence through `response_variable`,
   ready to hand to a TTS or notification action.
 
 ## Requirements
 
 - Home Assistant 2025.2 or newer.
-- A Baby Tracker integration token (see below).
+- A Little Log account and an integration token.
 
 ## Installation
 
-### HACS (custom repository)
+### HACS
 
-This integration is not in the default HACS list yet, so add it as a custom repository:
+This integration is not in the default HACS list yet, so it is added as a custom
+repository. The button below opens the dialog in your own Home Assistant with the
+repository prefilled:
 
-1. In Home Assistant, open **HACS**.
-2. Open the three-dot menu at the top right and choose **Custom repositories**.
-3. Repository: `https://github.com/nils-frank/ha-babytracker`, type: **Integration**.
-   Click **Add**.
-4. Search HACS for **Baby Tracker**, open it and click **Download**.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=nils-frank&repository=ha-little-log&category=integration)
+
+Click it, confirm **Add**, then **Download**, and restart Home Assistant.
+
+<details>
+<summary>Manual HACS steps, if the button does not work</summary>
+
+The button relies on [My Home Assistant](https://my.home-assistant.io/), which needs to
+be enabled in your instance. Otherwise:
+
+1. Open **HACS**.
+2. Three-dot menu at the top right > **Custom repositories**.
+3. Repository: `https://github.com/nils-frank/ha-little-log`, type: **Integration**.
+4. **Add**, then search HACS for **Little Log** and **Download** it.
 5. Restart Home Assistant.
-6. Go to **Settings > Devices & services > Add integration** and pick **Baby Tracker**.
+
+</details>
 
 ### Manual
 
-Copy `custom_components/babytracker` into your Home Assistant `config/custom_components/`
-directory, restart, then add the integration from **Settings > Devices & services**.
+Copy `custom_components/little_log` into your Home Assistant `config/custom_components/`
+directory and restart.
+
+### Adding the integration
+
+After installing and restarting, either click:
+
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=little_log)
+
+or go to **Settings > Devices & services > Add integration** and search for
+**Little Log**.
 
 ## Getting a token
 
-Open the Baby Tracker app, go to its settings and generate an integration token for this
-device. The token looks like `bt_...` and is per device, so you can revoke this one
-without affecting the app itself. Paste it into the config flow; the integration
-validates it with a live `GET /status` call and will tell you whether the token was
-rejected or the API was unreachable.
+Generate an integration token in your Little Log account settings. The token looks like
+`bt_...` and is issued per device, so you can revoke the one you gave Home Assistant
+without touching your other devices or the account itself.
 
-Keep the token out of version control and out of shared dashboards. It grants write
-access to your baby log.
+Paste it into the config flow. The integration validates it with a live `GET /status`
+call, and tells you whether the token was rejected or the API was unreachable, rather
+than failing later with a broken entity.
+
+Keep the token out of version control and off shared dashboards. It grants write access
+to your log.
 
 ## Entity
 
@@ -60,7 +115,7 @@ access to your baby log.
 | --- | --- | --- |
 | `sensor.baby_state` | `awake` or `asleep` | `since_utc`, `elapsed_min`, `last_sleep`, `today`, `say` |
 
-`say` is a dictionary of ready-to-read German sentences generated by the vendor
+`say` is a dictionary of ready-to-read German sentences generated by the app
 (`summary`, `state`, `last_sleep`, `forecast`, `today`, `diaper`, `bottle`, `nursing`).
 They are passed through untouched, which makes them a convenient TTS source but means
 their language follows the app, not your Home Assistant locale.
@@ -68,38 +123,38 @@ their language follows the app, not your Home Assistant locale.
 The sensor is unavailable while the API cannot be reached; a revoked token starts a
 reauthentication flow instead of failing silently.
 
-## Services
+## Actions
 
-All services take the optional timing fields below, except `undo`:
+All actions take the optional timing fields below, except `undo`:
 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `minutes_ago` | 0-720 | Backdate the event. Defaults to now. |
 | `at_utc` | timestamp | Exact time, as an alternative to `minutes_ago`. A value without a time zone is read in Home Assistant's own time zone and converted to UTC. |
-| `config_entry_id` | config entry | Only needed when more than one Baby Tracker token is configured. |
+| `config_entry_id` | config entry | Only needed when more than one Little Log token is configured. |
 
-| Service | Extra fields | Effect |
+| Action | Extra fields | Effect |
 | --- | --- | --- |
-| `babytracker.sleep_start` | - | Starts a sleep period. |
-| `babytracker.sleep_stop` | - | Ends the current sleep period. |
-| `babytracker.sleep_toggle` | - | Starts or ends sleep depending on the current state. Ideal for one physical button. |
-| `babytracker.cry_start` | - | Starts a crying period. |
-| `babytracker.cry_stop` | - | Ends a crying period. |
-| `babytracker.bottle` | - | Logs a bottle feeding. |
-| `babytracker.cue` | `subtype` (required, e.g. `yawn`) | Logs a cue event. |
-| `babytracker.diaper` | `kind` (`wet`/`dirty`/`both`/`dry`) **or** `pee_level` + `poop_level` (`none`/`light`/`medium`/`full`, or `0`-`3`) | Logs a diaper change. With no fields the API defaults to medium for both levels. |
-| `babytracker.nursing` | `side` (`next`/`left`/`right`, default `next`) | Logs a nursing session. `next` alternates from the last recorded side. The API's own `L`/`R` spellings are accepted too. |
-| `babytracker.undo` | - | Reverses the last command sent with this token, within 10 minutes of it. |
+| `little_log.sleep_start` | - | Starts a sleep period. |
+| `little_log.sleep_stop` | - | Ends the current sleep period. |
+| `little_log.sleep_toggle` | - | Starts or ends sleep depending on the current state. Ideal for one physical button. |
+| `little_log.cry_start` | - | Starts a crying period. |
+| `little_log.cry_stop` | - | Ends a crying period. |
+| `little_log.bottle` | - | Logs a bottle feeding. |
+| `little_log.cue` | `subtype` (required, e.g. `yawn`) | Logs a tired cue. |
+| `little_log.diaper` | `kind` (`wet`/`dirty`/`both`/`dry`) **or** `pee_level` + `poop_level` (`none`/`light`/`medium`/`full`, or `0`-`3`) | Logs a diaper change. With no fields the API defaults to medium for both levels. |
+| `little_log.nursing` | `side` (`next`/`left`/`right`, default `next`) | Logs a nursing session. `next` alternates from the last recorded side. The API's own `L`/`R` spellings are accepted too. |
+| `little_log.undo` | - | Reverses the last command sent with this token, within 10 minutes of it. |
 
 `kind` and the `pee_level`/`poop_level` pair are two ways of describing the same change,
 so they cannot be combined; the two level fields must be given together.
 
-Every service supports an optional response containing the API's payload, including
+Every action supports an optional response containing the API's payload, including
 `speech_de`:
 
 ```yaml
 actions:
-  - action: babytracker.sleep_toggle
+  - action: little_log.sleep_toggle
     data:
       minutes_ago: 5
     response_variable: result
@@ -121,7 +176,7 @@ automation:
         entity_id: binary_sensor.nursery_button
         to: "on"
     actions:
-      - action: babytracker.sleep_toggle
+      - action: little_log.sleep_toggle
 ```
 
 ## iOS Live Activity
@@ -162,7 +217,7 @@ automation:
         data:
           message: "{{ state_attr('sensor.baby_state', 'say').summary }}"
           data:
-            tag: baby-tracker-live
+            tag: little-log-live
             live_update: true
             chronometer: true
             when: >-
@@ -203,7 +258,7 @@ This was confirmed on a live device, not only read in the docs. There is no supp
 to add a long-press "start/stop sleep" action to the Live Activity card itself.
 
 The workaround is `data.url`: point it at a dashboard holding Start/Stop and quick-trigger
-buttons wired to this integration's services, so one tap on the card lands on the
+buttons wired to this integration's actions, so one tap on the card lands on the
 controls.
 
 ```yaml
@@ -216,19 +271,19 @@ cards:
     icon: mdi:power-sleep
     tap_action:
       action: perform-action
-      perform_action: babytracker.sleep_toggle
+      perform_action: little_log.sleep_toggle
   - type: button
     name: Bottle
     icon: mdi:baby-bottle-outline
     tap_action:
       action: perform-action
-      perform_action: babytracker.bottle
+      perform_action: little_log.bottle
   - type: button
     name: Diaper (wet)
     icon: mdi:human-baby-changing-table
     tap_action:
       action: perform-action
-      perform_action: babytracker.diaper
+      perform_action: little_log.diaper
       data:
         kind: wet
   - type: button
@@ -236,17 +291,19 @@ cards:
     icon: mdi:undo
     tap_action:
       action: perform-action
-      perform_action: babytracker.undo
+      perform_action: little_log.undo
 ```
 
 ## Notes on the API
 
-The integration talks to `https://little-log.de/api/integration/v1`. The vendor's older
-`https://lukas-reindl.de/babytracker/api/integration/v1` URL now answers with a
-cross-host 301 redirect, and HTTP clients strip the `Authorization` header on a
-cross-host redirect, which turns a perfectly valid token into a misleading 401. The
-client therefore calls the new host directly and refuses to follow a redirect away from
-it rather than retrying without credentials.
+The integration talks to `https://little-log.de/api/integration/v1`.
+
+Little Log was previously published as "Baby Tracker" on
+`https://lukas-reindl.de/babytracker/`. That old API URL now answers with a cross-host
+301 redirect, and HTTP clients strip the `Authorization` header on a cross-host redirect,
+which turns a perfectly valid token into a misleading 401. The client therefore calls the
+new host directly and refuses to follow a redirect away from it rather than silently
+retrying without credentials.
 
 Only `GET /status` and the `speech_de` field of command responses have a documented
 shape. Everything else is modelled with optional fields and passed through unchanged, and

@@ -1,4 +1,4 @@
-"""Tests for the Baby Tracker services."""
+"""Tests for the Little Log services."""
 
 from __future__ import annotations
 
@@ -13,9 +13,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.setup import async_setup_component
 
-from custom_components.babytracker.api import BabyTrackerConnectionError
-from custom_components.babytracker.const import DOMAIN
-from custom_components.babytracker.services import SERVICES
+from custom_components.little_log.api import LittleLogConnectionError
+from custom_components.little_log.const import DOMAIN
+from custom_components.little_log.services import SERVICES
 from tests.const import COMMAND_RESPONSE
 
 
@@ -130,7 +130,7 @@ async def test_api_error_surfaces(
     hass: HomeAssistant, init_integration: MockConfigEntry, mock_client: AsyncMock
 ) -> None:
     """An API failure becomes a HomeAssistantError."""
-    mock_client.async_command.side_effect = BabyTrackerConnectionError("down")
+    mock_client.async_command.side_effect = LittleLogConnectionError("down")
 
     with pytest.raises(HomeAssistantError, match="down"):
         await hass.services.async_call(DOMAIN, "undo", {}, blocking=True)
@@ -142,7 +142,7 @@ async def test_config_entry_id_selects_the_entry(
     """With two entries loaded the call must name one."""
     second = MockConfigEntry(
         domain=DOMAIN,
-        title="Baby Tracker 2",
+        title="Little Log 2",
         data={CONF_TOKEN: "bt_second00000000000000000000000"},
         unique_id="bt_second00000000000000000000000",
     )

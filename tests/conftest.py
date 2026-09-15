@@ -1,4 +1,4 @@
-"""Fixtures for the Baby Tracker tests."""
+"""Fixtures for the Little Log tests."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from homeassistant.const import CONF_TOKEN
 from homeassistant.core import HomeAssistant
 
-from custom_components.babytracker.api import BabyTrackerStatus
-from custom_components.babytracker.const import API_BASE_URL, DOMAIN
+from custom_components.little_log.api import LittleLogStatus
+from custom_components.little_log.const import API_BASE_URL, DOMAIN
 from tests.const import COMMAND_RESPONSE, MOCK_TOKEN, STATUS_PAYLOAD
 
 
@@ -29,7 +29,7 @@ def mock_config_entry() -> MockConfigEntry:
     """Return a config entry holding a placeholder token."""
     return MockConfigEntry(
         domain=DOMAIN,
-        title="Baby Tracker",
+        title="Little Log",
         data={CONF_TOKEN: MOCK_TOKEN},
         unique_id=MOCK_TOKEN,
     )
@@ -46,12 +46,12 @@ def mock_status_api(aioclient_mock: AiohttpClientMocker) -> AiohttpClientMocker:
 def mock_client() -> Generator[AsyncMock]:
     """Replace the API client with a fake for every entry point that builds one."""
     client = AsyncMock()
-    client.async_get_status.return_value = BabyTrackerStatus.from_dict(STATUS_PAYLOAD)
+    client.async_get_status.return_value = LittleLogStatus.from_dict(STATUS_PAYLOAD)
     client.async_command.return_value = COMMAND_RESPONSE
     with (
-        patch("custom_components.babytracker.BabyTrackerClient", return_value=client),
+        patch("custom_components.little_log.LittleLogClient", return_value=client),
         patch(
-            "custom_components.babytracker.config_flow.BabyTrackerClient",
+            "custom_components.little_log.config_flow.LittleLogClient",
             return_value=client,
         ),
     ):

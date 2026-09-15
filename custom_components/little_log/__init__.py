@@ -1,4 +1,4 @@
-"""The Baby Tracker integration."""
+"""The Little Log integration."""
 
 from __future__ import annotations
 
@@ -8,9 +8,9 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
-from .api import BabyTrackerClient
+from .api import LittleLogClient
 from .const import DOMAIN
-from .coordinator import BabyTrackerConfigEntry, BabyTrackerCoordinator
+from .coordinator import LittleLogConfigEntry, LittleLogCoordinator
 from .services import async_setup_services
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -29,10 +29,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: BabyTrackerConfigEntry) -> bool:
-    """Set up Baby Tracker from a config entry."""
-    client = BabyTrackerClient(async_get_clientsession(hass), entry.data[CONF_TOKEN])
-    coordinator = BabyTrackerCoordinator(hass, entry, client)
+async def async_setup_entry(hass: HomeAssistant, entry: LittleLogConfigEntry) -> bool:
+    """Set up Little Log from a config entry."""
+    client = LittleLogClient(async_get_clientsession(hass), entry.data[CONF_TOKEN])
+    coordinator = LittleLogCoordinator(hass, entry, client)
     await coordinator.async_config_entry_first_refresh()
 
     # The coordinator (which owns the client) lives on the entry itself rather than in
@@ -43,8 +43,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: BabyTrackerConfigEntry) 
     return True
 
 
-async def async_unload_entry(
-    hass: HomeAssistant, entry: BabyTrackerConfigEntry
-) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: LittleLogConfigEntry) -> bool:
     """Unload a config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
