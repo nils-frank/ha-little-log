@@ -180,6 +180,22 @@ automation:
       - action: little_log.sleep_toggle
 ```
 
+## Example dashboard
+
+[`examples/dashboard.yaml`](examples/dashboard.yaml) is a complete dashboard covering all
+ten actions, plus the current state, the app's own summary and forecast sentences, and a
+today overview.
+
+To use it: **Settings > Dashboards > Add dashboard**, open it, **Edit**, then the
+three-dot menu > **Raw configuration editor**, and paste the file over what is there.
+
+It uses built-in cards only, so it needs nothing from HACS beyond this integration, and
+it references only `sensor.baby_state` and the `little_log.*` actions, so there is
+nothing to rename unless you gave the sensor a different entity id.
+
+This is also the dashboard the Live Activity recipe below points at with `data.url`,
+since the Live Activity card cannot carry buttons of its own.
+
 ## iOS Live Activity
 
 This integration ships no iOS code. Live Activities come entirely from the official
@@ -260,7 +276,8 @@ to add a long-press "start/stop sleep" action to the Live Activity card itself.
 
 The workaround is `data.url`: point it at a dashboard holding Start/Stop and quick-trigger
 buttons wired to this integration's actions, so one tap on the card lands on the
-controls.
+controls. [`examples/dashboard.yaml`](examples/dashboard.yaml) is a ready-made one; a
+minimal version is just:
 
 ```yaml
 type: grid
