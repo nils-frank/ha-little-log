@@ -55,7 +55,7 @@ class BabyStateSensor(CoordinatorEntity[LittleLogCoordinator], SensorEntity):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry_id)},
             name="Little Log",
-            manufacturer="Little Log",
+            manufacturer="Lukas Reindl",
             configuration_url="https://little-log.de/",
         )
 

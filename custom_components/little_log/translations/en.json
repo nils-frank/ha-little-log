@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Little Log",
-        "description": "Enter an integration token from your Little Log account settings. It starts with 'bt_'.",
+        "description": "Enter an integration token from Little Log's Settings tab. It starts with 'bt_'.",
         "data": {
           "token": "Token"
         },
@@ -13,7 +13,7 @@
       },
       "reauth_confirm": {
         "title": "Reauthenticate Little Log",
-        "description": "The stored token is no longer accepted. Generate a new one in your Little Log account settings and enter it here.",
+        "description": "The stored token is no longer accepted. Generate a new one in Little Log's Settings tab and enter it here.",
         "data": {
           "token": "Token"
         },

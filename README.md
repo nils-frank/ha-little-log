@@ -22,10 +22,11 @@ window between naps is what most sleep routines hang on.
 
 Little Log offers a token-based integration API, which is what this project talks to.
 
-> Little Log is a third-party app and this integration is an unofficial community
-> project. It is not built, endorsed or supported by the app's author. Bugs in the
-> integration belong in [this repo's issue
-> tracker](https://github.com/nils-frank/ha-little-log/issues), not with the app.
+> Little Log is an app by Lukas Reindl. This Home Assistant integration is an
+> unofficial community project by Nils Frank and is not built, endorsed or
+> supported by the app's author. Bugs in the integration belong in [this repo's
+> issue tracker](https://github.com/nils-frank/ha-little-log/issues), not with the
+> app.
 
 ## Why use it from Home Assistant?
 
@@ -98,7 +99,7 @@ or go to **Settings > Devices & services > Add integration** and search for
 
 ## Getting a token
 
-Generate an integration token in your Little Log account settings. The token looks like
+Generate an integration token in Little Log's **Settings** tab. The token looks like
 `bt_...` and is issued per device, so you can revoke the one you gave Home Assistant
 without touching your other devices or the account itself.
 
@@ -293,6 +294,20 @@ cards:
       action: perform-action
       perform_action: little_log.undo
 ```
+
+## Icon
+
+The integration ships Little Log's own app icon in
+`custom_components/little_log/brand/`, rendered from the app's `favicon.svg` at 256x256
+and 512x512.
+
+Home Assistant 2026.3 and newer pick these up automatically; local brand images take
+priority over the CDN and need no manifest key. On older versions, and in HACS's own
+store listing, the icon is served from
+[brands.home-assistant.io](https://brands.home-assistant.io/), which requires a pull
+request adding `custom_integrations/little_log/` to the
+[home-assistant/brands](https://github.com/home-assistant/brands) repository. Until then
+older instances show a generic placeholder, which is cosmetic only.
 
 ## Notes on the API
 
