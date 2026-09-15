@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Home Assistant test artifacts
+.storage/
+home-assistant.log*
+config/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local notes (task brief, not part of the integration)
+PROMPT.md

@@ -1,0 +1,250 @@
+sleep_start:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+sleep_stop:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+sleep_toggle:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+cry_start:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+cry_stop:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+bottle:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+cue:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+    subtype:
+      required: true
+      example: "yawn"
+      selector:
+        text:
+diaper:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+    kind:
+      required: false
+      selector:
+        select:
+          options:
+            - "wet"
+            - "dirty"
+            - "both"
+            - "dry"
+          translation_key: "diaper_kind"
+    pee_level:
+      required: false
+      selector:
+        select:
+          options:
+            - "none"
+            - "light"
+            - "medium"
+            - "full"
+          translation_key: "diaper_level"
+    poop_level:
+      required: false
+      selector:
+        select:
+          options:
+            - "none"
+            - "light"
+            - "medium"
+            - "full"
+          translation_key: "diaper_level"
+nursing:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"
+    minutes_ago:
+      required: false
+      example: 15
+      selector:
+        number:
+          min: 0
+          max: 720
+          step: 1
+          unit_of_measurement: "min"
+          mode: "box"
+    at_utc:
+      required: false
+      example: "2026-01-01 07:30:00"
+      selector:
+        datetime:
+    side:
+      required: false
+      default: "next"
+      selector:
+        select:
+          options:
+            - "next"
+            - "left"
+            - "right"
+          translation_key: "nursing_side"
+undo:
+  fields:
+    config_entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: "babytracker"

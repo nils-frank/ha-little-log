@@ -1,0 +1,25 @@
+{
+  "entity": {
+    "sensor": {
+      "baby_state": {
+        "default": "mdi:baby-face-outline",
+        "state": {
+          "asleep": "mdi:sleep",
+          "awake": "mdi:sleep-off"
+        }
+      }
+    }
+  },
+  "services": {
+    "sleep_start": { "service": "mdi:sleep" },
+    "sleep_stop": { "service": "mdi:sleep-off" },
+    "sleep_toggle": { "service": "mdi:power-sleep" },
+    "cry_start": { "service": "mdi:emoticon-cry-outline" },
+    "cry_stop": { "service": "mdi:emoticon-happy-outline" },
+    "bottle": { "service": "mdi:baby-bottle-outline" },
+    "cue": { "service": "mdi:sleep" },
+    "diaper": { "service": "mdi:human-baby-changing-table" },
+    "nursing": { "service": "mdi:mother-nurse" },
+    "undo": { "service": "mdi:undo" }
+  }
+}

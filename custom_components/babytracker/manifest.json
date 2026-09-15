@@ -1,0 +1,11 @@
+{
+  "domain": "babytracker",
+  "name": "Baby Tracker",
+  "codeowners": ["@nils-frank"],
+  "config_flow": true,
+  "documentation": "https://github.com/nils-frank/ha-babytracker",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/nils-frank/ha-babytracker/issues",
+  "version": "1.0.0"
+}

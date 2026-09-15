@@ -1,0 +1,280 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Baby Tracker",
+        "description": "Enter the integration token from the Baby Tracker app under Settings, Integrations. It starts with 'bt_'.",
+        "data": {
+          "token": "Token"
+        },
+        "data_description": {
+          "token": "The per-device bearer token generated in the Baby Tracker app."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate Baby Tracker",
+        "description": "The stored token is no longer accepted. Generate a new one in the Baby Tracker app and enter it here.",
+        "data": {
+          "token": "Token"
+        },
+        "data_description": {
+          "token": "The per-device bearer token generated in the Baby Tracker app."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This token is already configured",
+      "reauth_successful": "Re-authentication was successful",
+      "unique_id_mismatch": "This token belongs to a different Baby Tracker account"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "baby_state": {
+        "name": "Baby state",
+        "state": {
+          "awake": "Awake",
+          "asleep": "Asleep"
+        }
+      }
+    }
+  },
+  "selector": {
+    "diaper_kind": {
+      "options": {
+        "wet": "Wet",
+        "dirty": "Dirty",
+        "both": "Wet and dirty",
+        "dry": "Dry"
+      }
+    },
+    "diaper_level": {
+      "options": {
+        "none": "None",
+        "light": "Light",
+        "medium": "Medium",
+        "full": "Full"
+      }
+    },
+    "nursing_side": {
+      "options": {
+        "next": "Next (alternate from last)",
+        "left": "Left",
+        "right": "Right"
+      }
+    }
+  },
+  "exceptions": {
+    "no_entries": {
+      "message": "No loaded Baby Tracker config entry was found."
+    },
+    "multiple_entries": {
+      "message": "More than one Baby Tracker config entry is loaded. Pass 'config_entry_id' to pick one."
+    },
+    "entry_not_loaded": {
+      "message": "The selected Baby Tracker config entry is not loaded."
+    },
+    "invalid_at_utc": {
+      "message": "'at_utc' is not a valid timestamp."
+    }
+  },
+  "services": {
+    "sleep_start": {
+      "name": "Start sleep",
+      "description": "Starts a sleep period.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "sleep_stop": {
+      "name": "Stop sleep",
+      "description": "Ends the current sleep period.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "sleep_toggle": {
+      "name": "Toggle sleep",
+      "description": "Starts or ends a sleep period depending on the current state. Suited to a single physical button.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "cry_start": {
+      "name": "Start crying",
+      "description": "Starts a crying period.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "cry_stop": {
+      "name": "Stop crying",
+      "description": "Ends the current crying period.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "bottle": {
+      "name": "Log bottle",
+      "description": "Logs a bottle feeding.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        }
+      }
+    },
+    "cue": {
+      "name": "Log cue",
+      "description": "Logs a cue event such as yawning.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        },
+        "subtype": {
+          "name": "Subtype",
+          "description": "The kind of cue to log, for example 'yawn'."
+        }
+      }
+    },
+    "diaper": {
+      "name": "Log diaper change",
+      "description": "Logs a diaper change. Use either 'Kind' or the pee and poop levels; with no fields the API defaults to medium for both.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        },
+        "kind": {
+          "name": "Kind",
+          "description": "Shorthand for the contents of the diaper."
+        },
+        "pee_level": {
+          "name": "Pee level",
+          "description": "How wet the diaper was. Must be given together with the poop level."
+        },
+        "poop_level": {
+          "name": "Poop level",
+          "description": "How dirty the diaper was. Must be given together with the pee level."
+        }
+      }
+    },
+    "nursing": {
+      "name": "Log nursing",
+      "description": "Logs a nursing session.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        },
+        "minutes_ago": {
+          "name": "Minutes ago",
+          "description": "Backdate the event by this many minutes (0-720). Defaults to now."
+        },
+        "at_utc": {
+          "name": "Timestamp",
+          "description": "Exact time of the event, as an alternative to 'Minutes ago'."
+        },
+        "side": {
+          "name": "Side",
+          "description": "Which side was used. 'Next' alternates from the last recorded side."
+        }
+      }
+    },
+    "undo": {
+      "name": "Undo",
+      "description": "Reverses the last command sent with this token, within 10 minutes of it.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Baby Tracker account",
+          "description": "Which Baby Tracker token to send the command with. Only needed when more than one is configured."
+        }
+      }
+    }
+  }
+}
