@@ -11,6 +11,7 @@ import voluptuous as vol
 from homeassistant.const import CONF_TOKEN
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.setup import async_setup_component
 
 from custom_components.babytracker.api import BabyTrackerConnectionError
 from custom_components.babytracker.const import DOMAIN
@@ -159,3 +160,12 @@ async def test_config_entry_id_selects_the_entry(
         blocking=True,
     )
     mock_client.async_command.assert_awaited_once_with("/undo", None)
+
+
+async def test_services_exist_without_a_loaded_entry(hass: HomeAssistant) -> None:
+    """Services are registered up front and explain themselves when unusable."""
+    assert await async_setup_component(hass, DOMAIN, {})
+
+    assert hass.services.has_service(DOMAIN, "sleep_toggle")
+    with pytest.raises(ServiceValidationError):
+        await hass.services.async_call(DOMAIN, "sleep_toggle", {}, blocking=True)

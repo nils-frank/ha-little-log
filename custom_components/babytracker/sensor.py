@@ -18,6 +18,9 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 from .coordinator import BabyTrackerConfigEntry, BabyTrackerCoordinator
 
+# Read-only platform fed by the coordinator, so no update is ever issued per entity.
+PARALLEL_UPDATES = 0
+
 # The API documents exactly these two states.
 STATE_OPTIONS = ["awake", "asleep"]
 
