@@ -3,16 +3,18 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.exceptions import ConfigEntryAuthFailed, HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
     LittleLogAuthError,
     LittleLogClient,
     LittleLogConnectionError,
+    LittleLogError,
     LittleLogStatus,
 )
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
@@ -53,3 +55,19 @@ class LittleLogCoordinator(DataUpdateCoordinator[LittleLogStatus]):
             raise ConfigEntryAuthFailed(str(err)) from err
         except LittleLogConnectionError as err:
             raise UpdateFailed(str(err)) from err
+
+    async def async_send_command(
+        self, path: str, body: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Run a write command, then refresh so the sensor reflects it.
+
+        Shared by the actions and the button entities so both report failures the
+        same way and neither has to wait out the poll interval to show the result.
+        """
+        try:
+            response = await self.client.async_command(path, body or None)
+        except LittleLogError as err:
+            raise HomeAssistantError(str(err)) from err
+
+        await self.async_request_refresh()
+        return response

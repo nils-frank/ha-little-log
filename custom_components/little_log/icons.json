@@ -1,5 +1,37 @@
 {
   "entity": {
+    "button": {
+      "sleep_toggle": {
+        "default": "mdi:power-sleep"
+      },
+      "sleep_start": {
+        "default": "mdi:sleep"
+      },
+      "sleep_stop": {
+        "default": "mdi:sleep-off"
+      },
+      "cry_start": {
+        "default": "mdi:emoticon-cry-outline"
+      },
+      "cry_stop": {
+        "default": "mdi:emoticon-happy-outline"
+      },
+      "bottle": {
+        "default": "mdi:baby-bottle-outline"
+      },
+      "nursing": {
+        "default": "mdi:mother-nurse"
+      },
+      "diaper": {
+        "default": "mdi:human-baby-changing-table"
+      },
+      "cue_yawn": {
+        "default": "mdi:sleep"
+      },
+      "undo": {
+        "default": "mdi:undo"
+      }
+    },
     "sensor": {
       "baby_state": {
         "default": "mdi:baby-face-outline",
@@ -11,15 +43,35 @@
     }
   },
   "services": {
-    "sleep_start": { "service": "mdi:sleep" },
-    "sleep_stop": { "service": "mdi:sleep-off" },
-    "sleep_toggle": { "service": "mdi:power-sleep" },
-    "cry_start": { "service": "mdi:emoticon-cry-outline" },
-    "cry_stop": { "service": "mdi:emoticon-happy-outline" },
-    "bottle": { "service": "mdi:baby-bottle-outline" },
-    "cue": { "service": "mdi:sleep" },
-    "diaper": { "service": "mdi:human-baby-changing-table" },
-    "nursing": { "service": "mdi:mother-nurse" },
-    "undo": { "service": "mdi:undo" }
+    "sleep_start": {
+      "service": "mdi:sleep"
+    },
+    "sleep_stop": {
+      "service": "mdi:sleep-off"
+    },
+    "sleep_toggle": {
+      "service": "mdi:power-sleep"
+    },
+    "cry_start": {
+      "service": "mdi:emoticon-cry-outline"
+    },
+    "cry_stop": {
+      "service": "mdi:emoticon-happy-outline"
+    },
+    "bottle": {
+      "service": "mdi:baby-bottle-outline"
+    },
+    "cue": {
+      "service": "mdi:sleep"
+    },
+    "diaper": {
+      "service": "mdi:human-baby-changing-table"
+    },
+    "nursing": {
+      "service": "mdi:mother-nurse"
+    },
+    "undo": {
+      "service": "mdi:undo"
+    }
   }
 }

@@ -10,13 +10,12 @@ from homeassistant.components.sensor import (
     SensorEntity,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import async_generate_entity_id
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
 from .coordinator import LittleLogConfigEntry, LittleLogCoordinator
+from .entity import build_device_info
 
 # Read-only platform fed by the coordinator, so no update is ever issued per entity.
 PARALLEL_UPDATES = 0
@@ -52,12 +51,7 @@ class BabyStateSensor(CoordinatorEntity[LittleLogCoordinator], SensorEntity):
         self.entity_id = async_generate_entity_id(
             ENTITY_ID_FORMAT, "baby_state", hass=hass
         )
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, entry_id)},
-            name="Little Log",
-            manufacturer="Lukas Reindl",
-            configuration_url="https://little-log.de/",
-        )
+        self._attr_device_info = build_device_info(coordinator)
 
     @property
     def native_value(self) -> str | None:

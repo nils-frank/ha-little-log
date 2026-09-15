@@ -17,12 +17,11 @@ from homeassistant.core import (
     SupportsResponse,
     callback,
 )
-from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.selector import ConfigEntrySelector
 from homeassistant.util import dt as dt_util
 
-from .api import LittleLogError
 from .const import (
     ATTR_AT_UTC,
     ATTR_KIND,
@@ -205,16 +204,9 @@ def _make_handler(
 
     async def handler(call: ServiceCall) -> ServiceResponse:
         coordinator = _async_get_coordinator(call.hass, call)
-        body = _build_body(service, call)
-        try:
-            response = await coordinator.client.async_command(
-                service.path, body or None
-            )
-        except LittleLogError as err:
-            raise HomeAssistantError(str(err)) from err
-
-        # Refresh so the sensor reflects the change without waiting out the interval.
-        await coordinator.async_request_refresh()
+        response = await coordinator.async_send_command(
+            service.path, _build_body(service, call)
+        )
         # Only `speech_de` is documented; the rest of the payload is passed through
         # unchanged so nothing the API sends is lost.
         return dict(response)

@@ -34,6 +34,38 @@
     }
   },
   "entity": {
+    "button": {
+      "sleep_toggle": {
+        "name": "Toggle sleep"
+      },
+      "sleep_start": {
+        "name": "Start sleep"
+      },
+      "sleep_stop": {
+        "name": "Stop sleep"
+      },
+      "cry_start": {
+        "name": "Start crying"
+      },
+      "cry_stop": {
+        "name": "Stop crying"
+      },
+      "bottle": {
+        "name": "Bottle"
+      },
+      "nursing": {
+        "name": "Nursing"
+      },
+      "diaper": {
+        "name": "Diaper"
+      },
+      "cue_yawn": {
+        "name": "Yawn"
+      },
+      "undo": {
+        "name": "Undo"
+      }
+    },
     "sensor": {
       "baby_state": {
         "name": "Baby state",

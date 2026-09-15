@@ -6,7 +6,11 @@
 #
 # Uses only built-in cards, so it needs nothing from HACS beyond this
 # integration. Every entity and action below ships with the integration; there
-# is nothing to rename unless you gave the sensor a different entity id.
+# is nothing to rename unless you renamed an entity yourself.
+#
+# Argument-free commands use the integration's own button entities. The ones
+# that carry a value - backdating, a specific diaper kind - call the action
+# directly, since a button entity cannot take parameters.
 #
 # This is also the dashboard the iOS Live Activity recipe in the README points
 # at with `data.url`, since a Live Activity card cannot carry buttons itself.
@@ -57,20 +61,15 @@ views:
             heading: Sleep
             heading_style: title
 
-          - type: button
-            name: Toggle sleep
-            icon: mdi:power-sleep
-            icon_height: 48px
+          - type: tile
+            entity: button.little_log_toggle_sleep
             tap_action:
-              action: perform-action
-              perform_action: little_log.sleep_toggle
+              action: toggle
 
-          - type: button
-            name: Woke up
-            icon: mdi:sleep-off
+          - type: tile
+            entity: button.little_log_stop_sleep
             tap_action:
-              action: perform-action
-              perform_action: little_log.sleep_stop
+              action: toggle
 
           - type: button
             name: Fell asleep 15 min ago
@@ -87,23 +86,15 @@ views:
             heading: Feeding
             heading_style: title
 
-          - type: button
-            name: Bottle
-            icon: mdi:baby-bottle-outline
+          - type: tile
+            entity: button.little_log_bottle
             tap_action:
-              action: perform-action
-              perform_action: little_log.bottle
+              action: toggle
 
-          - type: button
-            name: Nursing
-            icon: mdi:mother-nurse
-            # `next` alternates from the last recorded side. Use `left`/`right`
-            # on separate buttons if you would rather pick explicitly.
+          - type: tile
+            entity: button.little_log_nursing
             tap_action:
-              action: perform-action
-              perform_action: little_log.nursing
-              data:
-                side: next
+              action: toggle
 
       - type: grid
         cards:
@@ -144,36 +135,25 @@ views:
             heading: Other
             heading_style: title
 
-          - type: button
-            name: Yawn
-            icon: mdi:sleep
+          - type: tile
+            entity: button.little_log_yawn
             tap_action:
-              action: perform-action
-              perform_action: little_log.cue
-              data:
-                subtype: yawn
+              action: toggle
 
-          - type: button
-            name: Crying started
-            icon: mdi:emoticon-cry-outline
+          - type: tile
+            entity: button.little_log_start_crying
             tap_action:
-              action: perform-action
-              perform_action: little_log.cry_start
+              action: toggle
 
-          - type: button
-            name: Crying stopped
-            icon: mdi:emoticon-happy-outline
+          - type: tile
+            entity: button.little_log_stop_crying
             tap_action:
-              action: perform-action
-              perform_action: little_log.cry_stop
+              action: toggle
 
-          - type: button
-            name: Undo
-            icon: mdi:undo
-            # Only reverses the last command from this token, within 10 minutes.
+          - type: tile
+            entity: button.little_log_undo
             tap_action:
-              action: perform-action
-              perform_action: little_log.undo
+              action: toggle
 
       - type: grid
         cards:
