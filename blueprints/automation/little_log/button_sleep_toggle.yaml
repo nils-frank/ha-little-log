@@ -1,0 +1,54 @@
+blueprint:
+  name: Little Log button toggles sleep
+  description: >
+    Wires a physical button to Little Log's sleep toggle, so one press starts or
+    ends the nap depending on the current state. Meant for a button on the
+    nursery wall, where reaching for a phone is the last thing you want to do.
+
+
+    Works with any integration that exposes the button as an `event` entity.
+  domain: automation
+  author: Nils Frank
+  source_url: https://github.com/nils-frank/ha-little-log/blob/main/blueprints/automation/little_log/button_sleep_toggle.yaml
+  homeassistant:
+    min_version: "2024.10.0"
+  input:
+    button_event:
+      name: Button
+      description: The event entity your button exposes.
+      selector:
+        entity:
+          domain: event
+    minutes_ago:
+      name: Backdate by
+      description: >
+        Log the change this many minutes in the past. Useful when the button
+        lives by the door and you press it on the way out.
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 720
+          unit_of_measurement: minutes
+          mode: box
+
+mode: single
+max_exceeded: silent
+
+variables:
+  backdate: !input minutes_ago
+
+triggers:
+  # An event entity's state is the timestamp of the last event, so any change is
+  # a fresh press. A state trigger keeps this working on older cores, where the
+  # purpose-specific event trigger does not exist.
+  - trigger: state
+    entity_id: !input button_event
+    not_to:
+      - unknown
+      - unavailable
+
+actions:
+  - action: little_log.sleep_toggle
+    data:
+      minutes_ago: "{{ backdate | int }}"

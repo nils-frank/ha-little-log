@@ -1,0 +1,142 @@
+blueprint:
+  name: Little Log iOS Live Activity
+  description: >
+    Shows the baby's sleep state on the iPhone Lock Screen and in the Dynamic
+    Island as a Live Activity, using the official Home Assistant Companion app.
+
+
+    The card updates whenever the state changes, every five minutes, and after a
+    Home Assistant restart. Send `clear_notification` with the same tag to end
+    it.
+
+
+    Note: the Live Activity card cannot carry buttons. Set a dashboard path
+    below and tapping the card opens it, which is the supported way to reach
+    Start/Stop controls.
+  domain: automation
+  author: Nils Frank
+  source_url: https://github.com/nils-frank/ha-little-log/blob/main/blueprints/automation/little_log/live_activity.yaml
+  homeassistant:
+    min_version: "2024.10.0"
+  input:
+    devices:
+      name: Entities
+      icon: mdi:cellphone
+      input:
+        baby_sensor:
+          name: Little Log sensor
+          description: The sensor this integration creates.
+          selector:
+            entity:
+              integration: little_log
+              domain: sensor
+        mobile_device:
+          name: iPhone
+          description: >
+            The phone to show the activity on. The notify action is derived from
+            this device's name, so if you renamed the device in Home Assistant
+            after the Companion app registered it, the two can disagree.
+          selector:
+            device:
+              integration: mobile_app
+    appearance:
+      name: Appearance
+      icon: mdi:palette
+      collapsed: true
+      input:
+        use_chronometer:
+          name: Ticking timer
+          description: >
+            Show a native ticking timer counting from when the current state
+            began. Turn this off to show the app's own forecast sentence
+            instead, refreshed every five minutes rather than ticking live.
+          default: true
+          selector:
+            boolean:
+        background_color:
+          name: Background colour
+          default: "#1c1c1e"
+          selector:
+            text:
+        text_color:
+          name: Text colour
+          default: "#ffffff"
+          selector:
+            text:
+        dashboard_path:
+          name: Tap destination
+          description: Dashboard path opened when the card is tapped.
+          default: /lovelace/baby
+          selector:
+            text:
+    behaviour:
+      name: Behaviour
+      icon: mdi:cog
+      collapsed: true
+      input:
+        periodic_refresh:
+          name: Refresh every five minutes
+          description: >
+            Keeps the card current when nothing changes. Required if the ticking
+            timer is off, since the text only updates when this automation runs.
+          default: true
+          selector:
+            boolean:
+        activity_tag:
+          name: Activity tag
+          description: >
+            Updates carrying the same tag replace the same card instead of
+            stacking. Only change this if you run two of these.
+          default: little-log-live
+          selector:
+            text:
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  sensor_entity: !input baby_sensor
+  mobile_device_id: !input mobile_device
+  tag: !input activity_tag
+  chronometer: !input use_chronometer
+  background: !input background_color
+  foreground: !input text_color
+  destination: !input dashboard_path
+
+triggers:
+  - trigger: state
+    entity_id: !input baby_sensor
+    # Attribute-only updates repaint nothing the card shows.
+    to: ~
+  - trigger: time_pattern
+    minutes: /5
+    enabled: !input periodic_refresh
+  - trigger: homeassistant
+    event: start
+
+actions:
+  - action: >-
+      notify.mobile_app_{{ device_attr(mobile_device_id, 'name') | slugify }}
+    data:
+      message: >-
+        {% set say = state_attr(sensor_entity, 'say') or {} %}
+        {% set mins = state_attr(sensor_entity, 'elapsed_min') %}
+        {% if chronometer %}
+          {{ say.get('summary') or (states(sensor_entity) | capitalize) }}
+        {% else %}
+          {{ say.get('forecast') or say.get('summary')
+             or (states(sensor_entity) | capitalize) }}{% if mins is not none %}
+          ({{ mins }} min){% endif %}
+        {% endif %}
+      data:
+        tag: "{{ tag }}"
+        live_update: true
+        chronometer: "{{ chronometer }}"
+        when: >-
+          {% set since = state_attr(sensor_entity, 'since_utc') %}
+          {{ (as_timestamp(since) | int) if since else (now() | as_timestamp | int) }}
+        notification_icon: >-
+          {{ 'mdi:sleep' if is_state(sensor_entity, 'asleep') else 'mdi:sleep-off' }}
+        background_color: "{{ background }}"
+        text_color: "{{ foreground }}"
+        url: "{{ destination }}"

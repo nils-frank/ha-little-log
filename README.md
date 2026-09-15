@@ -51,6 +51,7 @@ a phone. With this integration you can:
 - Ten buttons for the argument-free commands, usable the moment the integration is set
   up, with no automation or dashboard wiring.
 - Ten actions mapping 1:1 onto the API, all of them able to backdate an event.
+- Importable blueprints for the iOS Live Activity and for wiring a physical button.
 - Every action can return the API's `speech_de` sentence through `response_variable`,
   ready to hand to a TTS or notification action.
 
@@ -224,7 +225,36 @@ nothing to rename unless you gave the sensor a different entity id.
 This is also the dashboard the Live Activity recipe below points at with `data.url`,
 since the Live Activity card cannot carry buttons of its own.
 
-## iOS Live Activity
+## Blueprints
+
+Two importable automation blueprints ship with the repo. Import once, then create as
+many automations from them as you like; re-import later to pick up fixes.
+
+### iOS Live Activity
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fnils-frank%2Fha-little-log%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Flittle_log%2Flive_activity.yaml)
+
+Wraps the recipe below into a form you fill in: pick the sensor and your iPhone, choose
+whether you want the ticking timer or the app's forecast sentence, set the colours and
+the tap destination.
+
+### Button toggles sleep
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fnils-frank%2Fha-little-log%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Flittle_log%2Fbutton_sleep_toggle.yaml)
+
+Wires a physical button to `little_log.sleep_toggle`, so one press starts or ends the
+nap. Takes any button exposed as an `event` entity, and can backdate the change by a
+fixed number of minutes for a button that lives by the door.
+
+Blueprints only cover automations and scripts. Home Assistant has no mechanism for an
+integration to ship a dashboard, which is why the dashboard above stays a file you paste
+once.
+
+## iOS Live Activity, by hand
+
+The blueprint above does all of this for you. This section is the underlying recipe, for
+anyone who would rather write the automation themselves or wants to understand what the
+blueprint sets.
 
 This integration ships no iOS code. Live Activities come entirely from the official
 [Home Assistant Companion app's Live Activity support](https://companion.home-assistant.io/docs/notifications/live-activities/):
